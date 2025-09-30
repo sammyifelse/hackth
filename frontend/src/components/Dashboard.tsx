@@ -28,7 +28,10 @@ import {
   MenuItem,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
+  FormControlLabel,
+  Switch,
+  Divider
 } from '@mui/material';
 import {
   TrendingUp,
@@ -38,7 +41,8 @@ import {
   ExpandMore,
   Upload,
   Person,
-  AccountBalance
+  AccountBalance,
+  Settings as SettingsIcon
 } from '@mui/icons-material';
 
 interface DashboardStats {
@@ -69,7 +73,7 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [testResult, setTestResult] = useState<Transaction | null>(null);
-  
+
   // New state for enhanced features
   const [customDialogOpen, setCustomDialogOpen] = useState(false);
   const [bulkDialogOpen, setBulkDialogOpen] = useState(false);
@@ -78,6 +82,10 @@ const Dashboard: React.FC = () => {
   const [customTransactionType, setCustomTransactionType] = useState('UPI');
   const [bulkTransactions, setBulkTransactions] = useState<any[]>([]);
   const [bulkResults, setBulkResults] = useState<any[]>([]);
+
+  // Settings state
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isHighContrast, setIsHighContrast] = useState<boolean>(false);
 
   // Updated API URL to match our working backend
   const API_BASE = 'http://localhost:8000';
@@ -88,19 +96,73 @@ const Dashboard: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Load settings from localStorage
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('darkMode');
+    const savedHighContrast = localStorage.getItem('highContrast');
+    
+    if (savedDarkMode !== null) {
+      setIsDarkMode(JSON.parse(savedDarkMode));
+    }
+    
+    if (savedHighContrast !== null) {
+      setIsHighContrast(JSON.parse(savedHighContrast));
+    }
+  }, []);
+
+  // Apply dark mode theme
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+      document.body.style.backgroundColor = '#121212';
+      document.body.style.color = '#ffffff';
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.body.style.backgroundColor = '#ffffff';
+      document.body.style.color = '#000000';
+    }
+  }, [isDarkMode]);
+
+  // Apply high contrast
+  useEffect(() => {
+    if (isHighContrast) {
+      document.documentElement.classList.add('high-contrast');
+      document.body.style.filter = 'contrast(150%)';
+    } else {
+      document.documentElement.classList.remove('high-contrast');
+      document.body.style.filter = 'none';
+    }
+  }, [isHighContrast]);
+
+  // Handle Dark Mode toggle
+  const handleDarkModeToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.checked;
+    setIsDarkMode(newValue);
+    localStorage.setItem('darkMode', JSON.stringify(newValue));
+    console.log(`Dark Mode ${newValue ? 'enabled' : 'disabled'}`);
+  };
+
+  // Handle High Contrast toggle
+  const handleHighContrastToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.checked;
+    setIsHighContrast(newValue);
+    localStorage.setItem('highContrast', JSON.stringify(newValue));
+    console.log(`High Contrast ${newValue ? 'enabled' : 'disabled'}`);
+  };
+
   const fetchDashboardData = async () => {
     try {
       // Fetch dashboard stats
       const statsResponse = await fetch(`${API_BASE}/api/stats`);
       const statsData = await statsResponse.json();
-      
+
       // Add missing fields with defaults
       const enhancedStats = {
         ...statsData,
         pending_alerts: statsData.recent_alerts || 0,
         fraud_rate: statsData.fraud_rate || 0
       };
-      
+
       setStats(enhancedStats);
       setLoading(false);
     } catch (err) {
@@ -124,15 +186,15 @@ const Dashboard: React.FC = () => {
       const response = await fetch(`${API_BASE}/api/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           amount: amount,
           merchant: merchant,
           card_type: 'credit'
         })
       });
-      
+
       const result = await response.json();
-      
+
       // Convert result to Transaction interface
       const transaction: Transaction = {
         id: result.transaction_id || Date.now(),
@@ -145,7 +207,7 @@ const Dashboard: React.FC = () => {
         timestamp: new Date().toISOString(),
         transaction_type: 'credit_card'
       };
-      
+
       setTestResult(transaction);
     } catch (err) {
       setError(`Failed to test fraud detection: ${err}`);
@@ -163,15 +225,15 @@ const Dashboard: React.FC = () => {
       const response = await fetch(`${API_BASE}/api/predict`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           amount: parseFloat(customAmount),
           merchant: customMerchant,
           transaction_type: customTransactionType
         })
       });
-      
+
       const result = await response.json();
-      
+
       const transaction: Transaction = {
         id: Date.now(),
         transaction_id: result.transaction_id,
@@ -183,7 +245,7 @@ const Dashboard: React.FC = () => {
         timestamp: new Date().toISOString(),
         transaction_type: customTransactionType
       };
-      
+
       setTestResult(transaction);
       setCustomDialogOpen(false);
       setCustomAmount('');
@@ -208,7 +270,7 @@ const Dashboard: React.FC = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(transaction)
         });
-        
+
         const result = await response.json();
         results.push({
           ...transaction,
@@ -224,7 +286,7 @@ const Dashboard: React.FC = () => {
         });
       }
     }
-    
+
     setBulkResults(results);
   };
 
@@ -278,15 +340,15 @@ const Dashboard: React.FC = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 onClick={() => testFraudDetection(15000, "Luxury Store")}
                 color="error"
                 startIcon={<Warning />}
               >
                 Test High-Risk ($15,000)
               </Button>
-              <Button 
+              <Button
                 variant="contained"
                 onClick={() => testFraudDetection(50, "Coffee Shop")}
                 color="success"
@@ -294,21 +356,21 @@ const Dashboard: React.FC = () => {
               >
                 Test Normal ($50)
               </Button>
-              <Button 
+              <Button
                 variant="outlined"
                 onClick={() => setCustomDialogOpen(true)}
                 startIcon={<Person />}
               >
                 Custom Transaction
               </Button>
-              <Button 
+              <Button
                 variant="outlined"
                 onClick={() => setBulkDialogOpen(true)}
                 startIcon={<AccountBalance />}
               >
                 Bulk Checker
               </Button>
-              <Button 
+              <Button
                 variant="outlined"
                 onClick={fetchDashboardData}
               >
@@ -385,7 +447,7 @@ const Dashboard: React.FC = () => {
             <Typography variant="h5" gutterBottom>
               Recent Transactions
             </Typography>
-            
+
             {recentTransactions.length === 0 && !testResult ? (
               <Alert severity="info">
                 No transactions found. Generate some sample data to get started!
@@ -406,7 +468,7 @@ const Dashboard: React.FC = () => {
                             {testResult.merchant || testResult.transaction_type || 'Unknown'}
                           </Typography>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={3}>
                           <Typography variant="body1">
                             {testResult.user_id || 'Test User'}
@@ -415,9 +477,9 @@ const Dashboard: React.FC = () => {
                             User ID
                           </Typography>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={3}>
-                          <Chip 
+                          <Chip
                             label={testResult.is_fraud ? 'FRAUD' : 'LEGITIMATE'}
                             color={testResult.is_fraud ? 'error' : 'success'}
                             variant={testResult.is_fraud ? 'filled' : 'outlined'}
@@ -427,7 +489,7 @@ const Dashboard: React.FC = () => {
                             {testResult.risk_level && ` (${testResult.risk_level})`}
                           </Typography>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={3}>
                           <Typography variant="body2" color="text.secondary">
                             {new Date(testResult.timestamp).toLocaleString()}
@@ -437,7 +499,7 @@ const Dashboard: React.FC = () => {
                     </CardContent>
                   </Card>
                 )}
-                
+
                 {/* Show regular transactions */}
                 {recentTransactions.map((transaction) => (
                   <Card key={transaction.id} sx={{ mb: 2 }}>
@@ -451,7 +513,7 @@ const Dashboard: React.FC = () => {
                             {transaction.transaction_type || 'Transaction'}
                           </Typography>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={3}>
                           <Typography variant="body1">
                             {transaction.user_id || `ID: ${transaction.id}`}
@@ -460,9 +522,9 @@ const Dashboard: React.FC = () => {
                             User ID
                           </Typography>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={3}>
-                          <Chip 
+                          <Chip
                             label={transaction.is_fraud ? 'FRAUD' : 'LEGITIMATE'}
                             color={transaction.is_fraud ? 'error' : 'success'}
                             variant={transaction.is_fraud ? 'filled' : 'outlined'}
@@ -471,7 +533,7 @@ const Dashboard: React.FC = () => {
                             Score: {(transaction.fraud_score * 100).toFixed(1)}%
                           </Typography>
                         </Grid>
-                        
+
                         <Grid item xs={12} sm={3}>
                           <Typography variant="body2" color="text.secondary">
                             {new Date(transaction.timestamp).toLocaleString()}
@@ -500,6 +562,105 @@ const Dashboard: React.FC = () => {
             <Alert severity="info" sx={{ mt: 1 }}>
               🤖 ML Model: {stats?.model_status === 'active' ? 'Production RandomForest model loaded' : 'Using fallback rules'}
             </Alert>
+          </Paper>
+        </Grid>
+      </Grid>
+
+      {/* Settings Section - NEW ADDITION */}
+      <Grid container spacing={3} sx={{ mt: 2 }}>
+        <Grid item xs={12}>
+          <Paper sx={{ p: 3 }}>
+            <Box mb={3}>
+              <Box display="flex" alignItems="center" mb={2}>
+                <SettingsIcon sx={{ mr: 1 }} />
+                <Typography variant="h5" component="h2">
+                  Settings
+                </Typography>
+              </Box>
+              <Typography variant="subtitle1" color="text.secondary">
+                Configure your FraudGuard Pro preferences
+              </Typography>
+            </Box>
+
+            {/* Appearance Section */}
+            <Box mb={3}>
+              <Typography variant="h6" component="h3" gutterBottom>
+                ⚫ Appearance
+              </Typography>
+              
+              <Divider sx={{ mb: 3 }} />
+
+              {/* Dark Mode Setting */}
+              <Box mb={3}>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Typography variant="h6" component="h4">
+                      Dark Mode
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Toggle between light and dark themes
+                    </Typography>
+                  </Box>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isDarkMode}
+                        onChange={handleDarkModeToggle}
+                        name="darkMode"
+                        color="primary"
+                      />
+                    }
+                    label=""
+                    sx={{ m: 0 }}
+                  />
+                </Box>
+              </Box>
+
+              <Divider sx={{ mb: 3 }} />
+
+              {/* High Contrast Setting */}
+              <Box mb={3}>
+                <Box display="flex" justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Typography variant="h6" component="h4">
+                      High Contrast
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Increase contrast for better visibility
+                    </Typography>
+                  </Box>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={isHighContrast}
+                        onChange={handleHighContrastToggle}
+                        name="highContrast"
+                        color="primary"
+                      />
+                    }
+                    label=""
+                    sx={{ m: 0 }}
+                  />
+                </Box>
+              </Box>
+
+              {/* Status Display */}
+              <Alert severity="success" sx={{ mt: 2 }}>
+                ✅ Settings are automatically saved and will persist across browser sessions
+              </Alert>
+
+              <Box mt={2} p={2} sx={{ backgroundColor: 'action.hover', borderRadius: 1 }}>
+                <Typography variant="subtitle2" gutterBottom>
+                  Current Settings Status:
+                </Typography>
+                <Typography variant="body2">
+                  🌙 Dark Mode: {isDarkMode ? 'Enabled' : 'Disabled'}
+                </Typography>
+                <Typography variant="body2">
+                  🔆 High Contrast: {isHighContrast ? 'Enabled' : 'Disabled'}
+                </Typography>
+              </Box>
+            </Box>
           </Paper>
         </Grid>
       </Grid>
@@ -545,7 +706,7 @@ const Dashboard: React.FC = () => {
               </Select>
             </FormControl>
             <Alert severity="info">
-              💡 Test with real amounts you would transfer. Our AI model will analyze the transaction pattern.
+              💡 Test with real amounts you would transfer. Our AI model will analyze the transaction pattern.      
             </Alert>
           </Box>
         </DialogContent>
@@ -568,18 +729,18 @@ const Dashboard: React.FC = () => {
             <Alert severity="info" sx={{ mb: 2 }}>
               🏦 Banks can upload transaction batches to check for potential fraud patterns
             </Alert>
-            
+
             <Box sx={{ mb: 2 }}>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 onClick={addSampleBulkTransactions}
                 startIcon={<Upload />}
                 sx={{ mr: 2 }}
               >
                 Add Sample Transactions
               </Button>
-              <Button 
-                variant="contained" 
+              <Button
+                variant="contained"
                 onClick={processBulkTransactions}
                 disabled={bulkTransactions.length === 0}
               >
@@ -640,16 +801,16 @@ const Dashboard: React.FC = () => {
                             <TableCell>₹{result.amount}</TableCell>
                             <TableCell>{result.merchant}</TableCell>
                             <TableCell>
-                              <Chip 
-                                label={result.risk_level || 'UNKNOWN'} 
+                              <Chip
+                                label={result.risk_level || 'UNKNOWN'}
                                 color={result.risk_level === 'HIGH' ? 'error' : 'success'}
                                 size="small"
                               />
                             </TableCell>
                             <TableCell>{(result.fraud_score * 100).toFixed(1)}%</TableCell>
                             <TableCell>
-                              <Chip 
-                                label={result.is_fraud ? 'SUSPICIOUS' : 'LEGITIMATE'} 
+                              <Chip
+                                label={result.is_fraud ? 'SUSPICIOUS' : 'LEGITIMATE'}
                                 color={result.is_fraud ? 'error' : 'success'}
                                 size="small"
                               />
