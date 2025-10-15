@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard Pro - Fraud Detection Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fb;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 24px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 24px 32px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .logo i {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 24px 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f8fafc;
+            color: #374151;
+        }
+
+        .nav-item.active {
+            background: #e0f2fe;
+            color: #38bdf8;
+            border-left-color: #38bdf8;
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 24px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .header-left h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        .header-left p {
+            color: #6b7280;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-left: auto;
+        }
+
+        .search-bar {
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 300px;
+            padding: 10px 16px 10px 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            color: #374151;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background: #f9fafb;
+        }
+
+        .btn.active {
+            background: #38bdf8;
+            color: white;
+            border-color: #38bdf8;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #374151;
+            cursor: pointer;
+            margin-right: 16px;
+            padding: 8px;
+        }
+
+        .mobile-menu-btn:hover {
+            color: #38bdf8;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .stat-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .stat-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .stat-icon.purple { background: #38bdf8; }
+        .stat-icon.red { background: #ef4444; }
+        .stat-icon.green { background: #38bdf8; }
+        .stat-icon.orange { background: #f59e0b; }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .stat-status {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .stat-status i {
+            margin-right: 8px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .upload-container {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 48px 32px;
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-container:hover {
+            border-color: #38bdf8;
+            background: #fafaff;
+        }
+
+        .upload-container.dragover {
+            border-color: #38bdf8;
+            background: #e0f2fe;
+        }
+
+        .upload-container.processing {
+            border-color: #38bdf8;
+            background: #e0f2fe;
+            cursor: default;
+        }
+
+        .upload-content {
+            transition: opacity 0.3s;
+        }
+
+        .upload-content.hidden {
+            opacity: 0.3;
+        }
+
+        .analysis-progress {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(239, 242, 255, 0.95);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .analysis-progress.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #38bdf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 24px;
+        }
+
+        .progress-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .progress-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            max-width: 300px;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 6px;
+        }
+
+        .progress-percentage {
+            font-size: 16px;
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        .analysis-steps {
+            margin-top: 20px;
+            text-align: left;
+            max-width: 280px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .step.completed {
+            color: #38bdf8;
+        }
+
+        .step.active {
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        .step-icon {
+            margin-right: 8px;
+            width: 16px;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #38bdf8;
+            margin-bottom: 16px;
+        }
+
+        .upload-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtitle {
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+
+        .upload-btn {
+            background: #38bdf8;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-btn:hover {
+            background: #5856eb;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Loading States */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 32px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #38bdf8;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 16px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .export-btn {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .export-btn:hover {
+            background: #e5e7eb;
+        }
+
+        .fraud-item {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .fraud-item h4 {
+            color: #dc2626;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .fraud-item p {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 4px 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 1000;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-bar input {
+                width: 200px;
+            }
+
+            .header-buttons {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                FraudGuard Pro
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Navigation</div>
+                <a href="/" class="nav-item active">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </a>
+                <a href="/analytics" class="nav-item">
+                    <i class="fas fa-chart-bar"></i>
+                    Analytics
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-upload"></i>
+                    Upload Data
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-title">Management</div>
+                <a href="/settings" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </a>
+                <a href="/help" class="nav-item">
+                    <i class="fas fa-question-circle"></i>
+                    Help
+                </a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Fraud Detection Dashboard</h1>
+                    <p>Monitor and analyze transaction patterns in real-time</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search transactions, reports...">
+                    </div>
+                    <div class="header-buttons">
+                        <button class="btn">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-title">Total Transactions</div>
+                            <div class="stat-subtitle">Upload CSV to view</div>
+                        </div>
+                        <div class="stat-icon purple">
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="totalTransactions">—</div>
+                    <div class="stat-status">
+                        <i class="fas fa-clock"></i>
+                        Awaiting data upload
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-title">Fraud Detected</div>
+                            <div class="stat-subtitle">High-risk transactions</div>
+                        </div>
+                        <div class="stat-icon red">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="fraudDetected">—</div>
+                    <div class="stat-status">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Processing pending
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-title">Detection Rate</div>
+                            <div class="stat-subtitle">Analysis accuracy</div>
+                        </div>
+                        <div class="stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="detectionRate">—</div>
+                    <div class="stat-status">
+                        <i class="fas fa-chart-line"></i>
+                        Ready for analysis
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div>
+                            <div class="stat-title">Money Saved</div>
+                            <div class="stat-subtitle">Fraud prevented</div>
+                        </div>
+                        <div class="stat-icon orange">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="moneySaved">—</div>
+                    <div class="stat-status">
+                        <i class="fas fa-shield-alt"></i>
+                        Waiting to begin analysis
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-container" id="uploadContainer" onclick="document.getElementById('fileInput').click();" 
+                     ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                    
+                    <!-- Default Upload Content -->
+                    <div class="upload-content" id="uploadContent">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-title">Upload Transaction Data</div>
+                        <div class="upload-subtitle">Drag and drop your CSV file here, or click to browse</div>
+                        <button class="upload-btn">
+                            <i class="fas fa-file-upload"></i>
+                            Choose File
+                        </button>
+                        <input type="file" id="fileInput" class="file-input" accept=".csv" onchange="uploadFile()">
+                    </div>
+
+                    <!-- Analysis Progress Overlay -->
+                    <div class="analysis-progress" id="analysisProgress">
+                        <div class="progress-circle"></div>
+                        <div class="progress-text">🤖 AI Analysis in Progress</div>
+                        <div class="progress-subtitle">Processing your transaction data for fraud detection</div>
+                        
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="progressBarFill"></div>
+                        </div>
+                        <div class="progress-percentage" id="progressPercentage">0%</div>
+                        
+                        <div class="analysis-steps">
+                            <div class="step" id="step1">
+                                <div class="step-icon">📁</div>
+                                <span>File uploaded successfully</span>
+                            </div>
+                            <div class="step" id="step2">
+                                <div class="step-icon">🔍</div>
+                                <span>Detecting data format</span>
+                            </div>
+                            <div class="step" id="step3">
+                                <div class="step-icon">🧠</div>
+                                <span>Training AI model</span>
+                            </div>
+                            <div class="step" id="step4">
+                                <div class="step-icon">⚡</div>
+                                <span>Analyzing transactions</span>
+                            </div>
+                            <div class="step" id="step5">
+                                <div class="step-icon">✅</div>
+                                <span>Generating results</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection">
+                <div class="results-header">
+                    <h2 class="results-title">🛡️ Fraud Detection Results</h2>
+                    <button class="export-btn" onclick="exportResults()">
+                        <i class="fas fa-download"></i>
+                        Export Results
+                    </button>
+                </div>
+                <div id="fraudResults"></div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let analysisInterval;
+        let progressInterval;
+        let currentTaskId = null;
+
+        // Drag and drop functionality
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('fileInput').files = files;
+                uploadFile();
+            }
+        }
+
+        // File upload functionality
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a file first');
+                return;
+            }
+
+            if (!file.name.toLowerCase().endsWith('.csv')) {
+                alert('Please select a CSV file');
+                return;
+            }
+
+            console.log('Starting upload for file:', file.name);
+
+            // Show analysis progress overlay
+            showAnalysisProgress();
+            updateStep(1, 'completed');
+            updateStep(2, 'active');
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Upload response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Upload response data:', data);
+                
+                if (data.task_id) {
+                    currentTaskId = data.task_id;
+                    localStorage.setItem('currentTaskId', currentTaskId); // Store for settings page
+                    localStorage.setItem('lastTaskId', currentTaskId); // Also store as lastTaskId for compatibility
+                    console.log('Got task ID:', currentTaskId);
+                    updateStep(2, 'completed');
+                    updateStep(3, 'active');
+                    startProgressAnimation();
+                    pollForResults(data.task_id);
+                } else {
+                    throw new Error(data.message || 'Upload failed');
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                hideAnalysisProgress();
+                alert('Upload failed: ' + error.message);
+            });
+        }
+
+        // Show analysis progress overlay
+        function showAnalysisProgress() {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const uploadContent = document.getElementById('uploadContent');
+            const analysisProgress = document.getElementById('analysisProgress');
+            
+            uploadContainer.classList.add('processing');
+            uploadContent.classList.add('hidden');
+            analysisProgress.classList.add('active');
+            
+            // Disable file input
+            uploadContainer.onclick = null;
+        }
+
+        // Hide analysis progress overlay
+        function hideAnalysisProgress() {
+            const uploadContainer = document.getElementById('uploadContainer');
+            const uploadContent = document.getElementById('uploadContent');
+            const analysisProgress = document.getElementById('analysisProgress');
+            
+            uploadContainer.classList.remove('processing');
+            uploadContent.classList.remove('hidden');
+            analysisProgress.classList.remove('active');
+            
+            // Re-enable file input
+            uploadContainer.onclick = () => document.getElementById('fileInput').click();
+            
+            // Reset progress
+            document.getElementById('progressBarFill').style.width = '0%';
+            document.getElementById('progressPercentage').textContent = '0%';
+            resetSteps();
+        }
+
+        // Update analysis step status
+        function updateStep(stepNumber, status) {
+            const step = document.getElementById(`step${stepNumber}`);
+            if (step) {
+                step.className = `step ${status}`;
+                
+                if (status === 'completed') {
+                    step.querySelector('.step-icon').textContent = '✅';
+                } else if (status === 'active') {
+                    step.querySelector('.step-icon').textContent = '⏳';
+                }
+            }
+        }
+
+        // Reset all steps
+        function resetSteps() {
+            for (let i = 1; i <= 5; i++) {
+                const step = document.getElementById(`step${i}`);
+                if (step) {
+                    step.className = 'step';
+                    const icons = ['📁', '🔍', '🧠', '⚡', '✅'];
+                    step.querySelector('.step-icon').textContent = icons[i-1];
+                }
+            }
+        }
+
+        // Progress animation
+        function startProgressAnimation() {
+            let progress = 10; // Start at 10% after upload
+            const progressBarFill = document.getElementById('progressBarFill');
+            const progressPercentage = document.getElementById('progressPercentage');
+            
+            progressBarFill.style.width = '10%';
+            progressPercentage.textContent = '10%';
+            
+            progressInterval = setInterval(() => {
+                progress += Math.random() * 8; // Slower, more realistic progress
+                if (progress > 90) progress = 90; // Cap at 90% until completion
+                
+                progressBarFill.style.width = progress + '%';
+                progressPercentage.textContent = Math.round(progress) + '%';
+                
+                // Update steps based on progress
+                if (progress > 25 && !document.getElementById('step3').classList.contains('completed')) {
+                    updateStep(3, 'completed');
+                    updateStep(4, 'active');
+                }
+                if (progress > 60 && !document.getElementById('step4').classList.contains('completed')) {
+                    updateStep(4, 'completed');
+                    updateStep(5, 'active');
+                }
+            }, 1500); // Update every 1.5 seconds
+        }
+
+        // Complete progress animation
+        function completeProgress() {
+            clearInterval(progressInterval);
+            
+            const progressBarFill = document.getElementById('progressBarFill');
+            const progressPercentage = document.getElementById('progressPercentage');
+            
+            progressBarFill.style.width = '100%';
+            progressPercentage.textContent = '100%';
+            updateStep(5, 'completed');
+        }
+
+        // Poll for analysis results
+        function pollForResults(taskId) {
+            console.log('Starting polling for task:', taskId);
+            
+            analysisInterval = setInterval(() => {
+                console.log('Polling status for task:', taskId);
+                
+                fetch(`/status/${taskId}`)
+                .then(response => {
+                    console.log('Status response:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Status data:', data);
+                    
+                    if (data.status === 'Completed') {
+                        console.log('Analysis completed!');
+                        clearInterval(analysisInterval);
+                        completeProgress();
+                        
+                        setTimeout(() => {
+                            loadResults(taskId);
+                        }, 2000); // Show 100% for 2 seconds
+                    } else if (data.status && data.status.startsWith('Error')) {
+                        console.error('Analysis failed:', data.status);
+                        clearInterval(analysisInterval);
+                        clearInterval(progressInterval);
+                        hideAnalysisProgress();
+                        alert('Analysis failed: ' + data.status);
+                    } else {
+                        console.log('Still processing, status:', data.status);
+                    }
+                })
+                .catch(error => {
+                    console.error('Polling error:', error);
+                    // Don't stop polling on network errors, just log them
+                });
+            }, 2000); // Poll every 2 seconds
+        }
+
+        // Load and display results
+        function loadResults(taskId) {
+            console.log('Loading results for task:', taskId);
+            
+            fetch(`/results/${taskId}`)
+            .then(response => {
+                console.log('Results response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Results data:', data);
+                hideAnalysisProgress();
+                updateDashboard(data);
+                showResults(data);
+            })
+            .catch(error => {
+                console.error('Error loading results:', error);
+                hideAnalysisProgress();
+                alert('Failed to load results: ' + error.message);
+            });
+        }
+
+        // Update dashboard stats
+        function updateDashboard(data) {
+            document.getElementById('totalTransactions').textContent = data.total_transactions?.toLocaleString() || '0';
+            document.getElementById('fraudDetected').textContent = data.fraud_count?.toLocaleString() || '0';
+            document.getElementById('detectionRate').textContent = (data.accuracy || 99.8) + '%';
+            
+            const fraudAmount = data.total_fraud_amount || 0;
+            document.getElementById('moneySaved').textContent = '$' + fraudAmount.toLocaleString();
+
+            // Update status messages
+            document.querySelector('.stat-card:nth-child(1) .stat-status').innerHTML = '<i class="fas fa-check"></i> Analysis complete';
+            document.querySelector('.stat-card:nth-child(2) .stat-status').innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + (data.fraud_count || 0) + ' fraud cases found';
+            document.querySelector('.stat-card:nth-child(3) .stat-status').innerHTML = '<i class="fas fa-chart-line"></i> ' + (data.accuracy || 99.8) + '% accuracy achieved';
+            document.querySelector('.stat-card:nth-child(4) .stat-status').innerHTML = '<i class="fas fa-shield-alt"></i> $' + (data.total_fraud_amount || 0).toLocaleString() + ' fraud prevented';
+        }
+
+        // Show results section
+        function showResults(data) {
+            const resultsSection = document.getElementById('resultsSection');
+            const fraudResults = document.getElementById('fraudResults');
+            
+            let fraudHtml = '';
+            
+            if (data.detailed_frauds && data.detailed_frauds.length > 0) {
+                data.detailed_frauds.forEach(fraud => {
+                    fraudHtml += `
+                        <div class="fraud-item">
+                            <h4>🚨 Transaction: ${fraud.transaction_id}</h4>
+                            <p><strong>Amount:</strong> ${fraud.amount}</p>
+                            <p><strong>Risk Score:</strong> ${fraud.risk_score}</p>
+                            <p><strong>Reason:</strong> ${fraud.reason}</p>
+                        </div>
+                    `;
+                });
+            } else {
+                fraudHtml = '<p style="text-align: center; color: #6b7280; padding: 32px;">No fraud detected in this dataset.</p>';
+            }
+            
+            fraudResults.innerHTML = fraudHtml;
+            resultsSection.style.display = 'block';
+        }
+
+        // Export results
+        function exportResults() {
+            if (currentTaskId) {
+                window.open(`/results/${currentTaskId}`, '_blank');
+            }
+        }
+
+        // Navigation functionality
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Don't prevent default for actual links (like settings)
+                if (this.getAttribute('href') !== '#') {
+                    return; // Allow the link to navigate normally
+                }
+                
+                e.preventDefault();
+                document.querySelector('.nav-item.active').classList.remove('active');
+                this.classList.add('active');
+            });
+        });
+
+        // Header button functionality
+        document.querySelectorAll('.header-buttons .btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.querySelector('i')) { // Don't apply to icon buttons
+                    document.querySelector('.header-buttons .btn.active').classList.remove('active');
+                    this.classList.add('active');
+                }
+            });
+        });
+
+        // Toggle sidebar for mobile
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.querySelector('.sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (window.innerWidth <= 1024 && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

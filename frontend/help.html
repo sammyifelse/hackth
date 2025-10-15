@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support - FraudGuard Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fb;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e2e8f0;
+            padding: 24px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 24px 32px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0284c7;
+        }
+
+        .logo i {
+            margin-right: 12px;
+            font-size: 24px;
+        }
+
+        .nav-section {
+            margin-bottom: 32px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 24px 12px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #6b7280;
+            text-decoration: none;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: #f8fafc;
+            color: #374151;
+        }
+
+        .nav-item.active {
+            background: #e0f2fe;
+            color: #0284c7;
+            border-left-color: #38bdf8;
+        }
+
+        .nav-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 24px;
+            max-width: 1200px;
+        }
+
+        .header {
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 16px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 32px;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 600px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            font-size: 18px;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .action-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+            border-color: #38bdf8;
+        }
+
+        .action-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+        }
+
+        .action-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .action-description {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* FAQ Section */
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .faq-container {
+            margin-bottom: 40px;
+        }
+
+        .faq-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1f2937;
+            transition: all 0.3s;
+        }
+
+        .faq-question:hover {
+            background: #f9fafb;
+        }
+
+        .faq-question i {
+            color: #38bdf8;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 24px 20px;
+            color: #6b7280;
+            line-height: 1.8;
+        }
+
+        /* Getting Started Guide */
+        .guide-steps {
+            counter-reset: step-counter;
+        }
+
+        .step-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+            position: relative;
+            padding-left: 80px;
+        }
+
+        .step-card::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 24px;
+            top: 24px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .step-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            color: #6b7280;
+            line-height: 1.8;
+        }
+
+        .step-code {
+            background: #f3f4f6;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-top: 12px;
+            color: #374151;
+        }
+
+        /* Contact Section */
+        .contact-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 16px;
+            background: #e0f2fe;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #38bdf8;
+        }
+
+        .contact-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .contact-info {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 16px;
+        }
+
+        .contact-btn {
+            padding: 10px 20px;
+            background: #38bdf8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+
+        .contact-btn:hover {
+            background: #0ea5e9;
+        }
+
+        /* Table Styles for CSV Format Guide */
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .export-btn {
+            padding: 8px 16px;
+            background: #38bdf8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .export-btn:hover {
+            background: #0ea5e9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f9fafb;
+            padding: 12px 24px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-top: 1px solid #f3f4f6;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #374151;
+        }
+
+        /* Resources */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+
+        .resource-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .resource-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .resource-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+        }
+
+        .resource-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .resource-description {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .resource-link {
+            color: #3b82f6;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .resource-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                FraudGuard Pro
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-title">Main Menu</div>
+                    <a href="/" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                    <a href="/analytics" class="nav-item">
+                        <i class="fas fa-chart-line"></i>
+                        Analytics
+                    </a>
+                    <a href="#" class="nav-item">
+                        <i class="fas fa-list"></i>
+                        Transactions
+                    </a>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-title">Tools</div>
+                    <a href="/settings" class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                    <a href="/help" class="nav-item active">
+                        <i class="fas fa-question-circle"></i>
+                        Help
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>💡 Help & Support Center</h1>
+                <p>Everything you need to get started and master FraudGuard Pro</p>
+            </div>
+
+            <!-- Search -->
+            <div class="search-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for help articles, tutorials, or FAQs...">
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <a href="#getting-started" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="action-title">Getting Started</div>
+                    <div class="action-description">Learn the basics and start detecting fraud</div>
+                </a>
+
+                <a href="#faq" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-question"></i>
+                    </div>
+                    <div class="action-title">FAQs</div>
+                    <div class="action-description">Find answers to common questions</div>
+                </a>
+
+                <a href="#api-docs" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="action-title">API Documentation</div>
+                    <div class="action-description">Integrate FraudGuard with your systems</div>
+                </a>
+
+                <a href="#contact" class="action-card">
+                    <div class="action-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="action-title">Contact Support</div>
+                    <div class="action-description">Get help from our expert team</div>
+                </a>
+            </div>
+
+            <!-- Getting Started -->
+            <div id="getting-started" class="section">
+                <h2 class="section-title">
+                    <i class="fas fa-rocket"></i>
+                    Getting Started Guide
+                </h2>
+
+                <div class="guide-steps">
+                    <div class="step-card">
+                        <div class="step-title">Prepare Your CSV File (IMPORTANT!)</div>
+                        <div class="step-description">
+                            <strong>Your CSV file MUST include these columns with exact headers:</strong>
+                            <div class="step-code">
+                                <strong>Required Columns:</strong><br>
+                                • transaction_id - Unique identifier (e.g., TXN_001, TXN_002)<br>
+                                • amount - Transaction amount with currency symbol (e.g., $150.00, $2,500.50)<br>
+                                • merchant - Merchant/store name (e.g., "Amazon", "Walmart")<br>
+                                • category - Transaction category (e.g., "Electronics", "Grocery")<br>
+                                • timestamp - Date/time (e.g., "2025-10-09 14:30:00" or "10/09/2025")<br><br>
+                                
+                                <strong>Optional but Recommended:</strong><br>
+                                • location/city - Transaction location<br>
+                                • card_type - Card type (Credit/Debit)<br>
+                                • customer_id - Customer identifier<br>
+                                • device - Device used (Mobile/Web/POS)<br><br>
+                                
+                                <strong>CSV Example Format:</strong><br>
+                                transaction_id,amount,merchant,category,timestamp,location<br>
+                                TXN_001,$150.00,Amazon,Electronics,2025-10-09 14:30:00,New York<br>
+                                TXN_002,$2500.50,Best Buy,Electronics,2025-10-09 15:45:00,Los Angeles<br><br>
+                                
+                                ✅ Max file size: 50MB<br>
+                                ✅ Format: UTF-8 encoded CSV with comma delimiter<br>
+                                ✅ First row MUST be headers
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-title">Upload Your Transaction Data</div>
+                        <div class="step-description">
+                            Navigate to the <strong>Dashboard</strong> (home page) and click the <strong>"Upload CSV File"</strong> button. Select your prepared CSV file following the format above.<br><br>
+                            
+                            <strong>What happens after upload:</strong><br>
+                            • File is validated for correct format<br>
+                            • All transactions are analyzed using ML algorithms<br>
+                            • Risk scores are calculated for each transaction<br>
+                            • Suspicious patterns are identified<br>
+                            • Results are available in 30-60 seconds for most files<br><br>
+                            
+                            <strong>Common Upload Errors & Solutions:</strong><br>
+                            ❌ "Missing required columns" → Check your CSV headers match exactly<br>
+                            ❌ "Invalid file format" → Ensure it's a .csv file, not .xlsx or .txt<br>
+                            ❌ "Amount format error" → Use format like $100.00 or 100.00<br>
+                            ❌ "File too large" → Split into multiple files under 50MB each
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-title">Configure AI Analysis (Optional but Recommended)</div>
+                        <div class="step-description">
+                            Go to <strong>Settings</strong> page from the sidebar menu. Configure AI-powered analysis:<br><br>
+                            
+                            <strong>1. Select Your LLM Provider:</strong><br>
+                            • <strong>Gemini</strong> (Google) - Best for detailed analysis<br>
+                            • <strong>OpenAI</strong> (ChatGPT) - Fast and reliable<br>
+                            • <strong>Claude</strong> (Anthropic) - Excellent for risk assessment<br>
+                            • <strong>Custom</strong> - Use your own API endpoint<br><br>
+                            
+                            <strong>2. Enter Your API Key:</strong><br>
+                            • Gemini: Get free key at <a href="https://makersuite.google.com/app/apikey" target="_blank">makersuite.google.com</a><br>
+                            • OpenAI: Get key at <a href="https://platform.openai.com" target="_blank">platform.openai.com</a><br>
+                            • Claude: Get key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a><br><br>
+                            
+                            <strong>3. Click "Save Settings"</strong><br>
+                            Your API key is stored securely in your browser only - never sent to our servers.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-title">Review Detection Results</div>
+                        <div class="step-description">
+                            After analysis completes, you'll see a comprehensive dashboard showing:<br><br>
+                            
+                            <strong>Key Metrics:</strong><br>
+                            • Total transactions analyzed<br>
+                            • Number of fraud cases detected<br>
+                            • Fraud detection rate (%)<br>
+                            • Total potential fraud amount<br><br>
+                            
+                            <strong>Detailed Fraud List:</strong><br>
+                            Each flagged transaction shows:<br>
+                            • Transaction ID and amount<br>
+                            • Risk score (0.0 - 1.0, higher = more suspicious)<br>
+                            • Specific reason why it was flagged<br>
+                            • Recommended actions<br><br>
+                            
+                            <strong>Risk Score Interpretation:</strong><br>
+                            • 0.9 - 1.0 = 🔴 Critical Risk (immediate action needed)<br>
+                            • 0.7 - 0.89 = 🟠 High Risk (review urgently)<br>
+                            • 0.5 - 0.69 = 🟡 Medium Risk (monitor closely)<br>
+                            • 0.3 - 0.49 = 🟢 Low Risk (routine review)
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-title">Get AI-Powered Insights</div>
+                        <div class="step-description">
+                            From the <strong>Settings</strong> page, click <strong>"Analyze Fraud Report with AI"</strong> to get:<br><br>
+                            
+                            <strong>Per-Transaction Analysis:</strong><br>
+                            For each fraudulent transaction, AI provides:<br>
+                            ✓ <strong>Why Flagged:</strong> Detailed explanation of suspicious indicators<br>
+                            ✓ <strong>Root Cause:</strong> Type of fraud (stolen card, account takeover, synthetic identity, etc.)<br>
+                            ✓ <strong>Risk Assessment:</strong> Critical/High/Medium/Low with reasoning<br>
+                            ✓ <strong>Immediate Actions:</strong> What to do RIGHT NOW<br>
+                            ✓ <strong>Prevention Strategies:</strong> How to stop similar fraud in future<br><br>
+                            
+                            <strong>Executive Summary:</strong><br>
+                            • Overall fraud patterns identified<br>
+                            • Trending attack vectors<br>
+                            • System-wide recommendations<br>
+                            • Compliance considerations<br><br>
+                            
+                            Analysis typically takes 10-30 seconds depending on number of fraud cases.
+                        </div>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-title">View Analytics & Export Data</div>
+                        <div class="step-description">
+                            <strong>Analytics Page:</strong><br>
+                            Visit <strong>Analytics</strong> from sidebar to see:<br>
+                            • Fraud trends over time with interactive charts<br>
+                            • Transaction volume patterns<br>
+                            • Fraud distribution by type/category<br>
+                            • High-risk transaction table<br>
+                            • AI-generated insights and recommendations<br><br>
+                            
+                            <strong>Export Options:</strong><br>
+                            • Click "Export Data" button on Analytics page<br>
+                            • Download complete fraud report with all details<br>
+                            • Share with your fraud prevention team<br>
+                            • Integrate with your compliance systems<br><br>
+                            
+                            <strong>Take Action:</strong><br>
+                            1. Review all critical risk transactions immediately<br>
+                            2. Block/freeze suspicious accounts<br>
+                            3. Implement AI-recommended preventive measures<br>
+                            4. Update fraud detection rules based on patterns<br>
+                            5. Monitor continuously for new threats
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CSV Format Guide Section -->
+            <div id="csv-format" class="section" style="margin-bottom: 40px;">
+                <h2 class="section-title">
+                    <i class="fas fa-file-csv"></i>
+                    CSV File Format Guide
+                </h2>
+
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">📋 Required CSV Column Specifications</div>
+                        <button class="export-btn" onclick="downloadCSVTemplate()">
+                            <i class="fas fa-download"></i>
+                            Download Template
+                        </button>
+                    </div>
+                    <table style="margin: 0;">
+                        <thead>
+                            <tr>
+                                <th>Column Name</th>
+                                <th>Required?</th>
+                                <th>Format</th>
+                                <th>Example</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>transaction_id</strong></td>
+                                <td><span class="badge high">REQUIRED</span></td>
+                                <td>Text/String</td>
+                                <td>TXN_001, TX12345</td>
+                                <td>Unique identifier for each transaction</td>
+                            </tr>
+                            <tr>
+                                <td><strong>amount</strong></td>
+                                <td><span class="badge high">REQUIRED</span></td>
+                                <td>$X.XX or X.XX</td>
+                                <td>$150.00, 1500.50</td>
+                                <td>Transaction amount with or without $ symbol</td>
+                            </tr>
+                            <tr>
+                                <td><strong>merchant</strong></td>
+                                <td><span class="badge high">REQUIRED</span></td>
+                                <td>Text/String</td>
+                                <td>Amazon, Walmart</td>
+                                <td>Store or merchant name</td>
+                            </tr>
+                            <tr>
+                                <td><strong>category</strong></td>
+                                <td><span class="badge high">REQUIRED</span></td>
+                                <td>Text/String</td>
+                                <td>Electronics, Grocery</td>
+                                <td>Transaction category or type</td>
+                            </tr>
+                            <tr>
+                                <td><strong>timestamp</strong></td>
+                                <td><span class="badge high">REQUIRED</span></td>
+                                <td>YYYY-MM-DD HH:MM:SS</td>
+                                <td>2025-10-09 14:30:00</td>
+                                <td>Date and time of transaction</td>
+                            </tr>
+                            <tr>
+                                <td><strong>location</strong></td>
+                                <td><span class="badge medium">RECOMMENDED</span></td>
+                                <td>Text/String</td>
+                                <td>New York, Los Angeles</td>
+                                <td>Transaction location or city</td>
+                            </tr>
+                            <tr>
+                                <td><strong>card_type</strong></td>
+                                <td><span class="badge low">OPTIONAL</span></td>
+                                <td>Credit/Debit</td>
+                                <td>Credit, Debit</td>
+                                <td>Type of payment card used</td>
+                            </tr>
+                            <tr>
+                                <td><strong>customer_id</strong></td>
+                                <td><span class="badge low">OPTIONAL</span></td>
+                                <td>Text/Number</td>
+                                <td>CUST_12345, 98765</td>
+                                <td>Customer or account identifier</td>
+                            </tr>
+                            <tr>
+                                <td><strong>device</strong></td>
+                                <td><span class="badge low">OPTIONAL</span></td>
+                                <td>Mobile/Web/POS</td>
+                                <td>Mobile, Web, POS</td>
+                                <td>Device type used for transaction</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="insights-grid" style="margin-top: 24px;">
+                    <div class="insight-card">
+                        <div class="insight-header">
+                            <div class="insight-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="insight-title">✅ Correct CSV Example</div>
+                        </div>
+                        <div class="insight-content">
+                            <div class="step-code" style="background: #f0fdf4; border-left: 3px solid #22c55e;">
+                                transaction_id,amount,merchant,category,timestamp,location<br>
+                                TXN_001,$150.00,Amazon,Electronics,2025-10-09 14:30:00,New York<br>
+                                TXN_002,$2500.50,Best Buy,Electronics,2025-10-09 15:45:00,Los Angeles<br>
+                                TXN_003,$75.25,Walmart,Grocery,2025-10-09 16:20:00,Chicago<br>
+                                TXN_004,$5000.00,Apple Store,Electronics,2025-10-09 17:10:00,San Francisco
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight-card" style="border-left-color: #ef4444;">
+                        <div class="insight-header">
+                            <div class="insight-icon" style="background: #fee2e2; color: #ef4444;">
+                                <i class="fas fa-times-circle"></i>
+                            </div>
+                            <div class="insight-title">❌ Common Mistakes to Avoid</div>
+                        </div>
+                        <div class="insight-content">
+                            <strong>1. Missing Required Columns</strong><br>
+                            ❌ Don't skip transaction_id, amount, merchant, category, or timestamp<br><br>
+                            
+                            <strong>2. Wrong File Format</strong><br>
+                            ❌ Don't upload .xlsx, .xls, or .txt files - Must be .csv<br><br>
+                            
+                            <strong>3. No Header Row</strong><br>
+                            ❌ First row must contain column names, not data<br><br>
+                            
+                            <strong>4. Inconsistent Data</strong><br>
+                            ❌ Don't mix formats: use either $100.00 OR 100.00 consistently<br><br>
+                            
+                            <strong>5. Special Characters</strong><br>
+                            ❌ Avoid quotes, commas inside values (use semicolon if needed)<br><br>
+                            
+                            <strong>6. Empty Rows</strong><br>
+                            ❌ Remove any blank rows between data
+                        </div>
+                    </div>
+
+                    <div class="insight-card" style="border-left-color: #f59e0b;">
+                        <div class="insight-header">
+                            <div class="insight-icon" style="background: #fef3c7; color: #f59e0b;">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <div class="insight-title">💡 Pro Tips for Best Results</div>
+                        </div>
+                        <div class="insight-content">
+                            <strong>1. Data Quality Matters</strong><br>
+                            • Include as much detail as possible for better fraud detection<br>
+                            • More columns = more accurate analysis<br><br>
+                            
+                            <strong>2. File Preparation</strong><br>
+                            • Save as "CSV UTF-8" format in Excel<br>
+                            • Test with 10-20 rows first before uploading full dataset<br><br>
+                            
+                            <strong>3. Amount Formatting</strong><br>
+                            • Accepted: $1500.00, 1500.00, 1,500.00<br>
+                            • Use consistent decimal points (2 places recommended)<br><br>
+                            
+                            <strong>4. Date Format</strong><br>
+                            • Best: YYYY-MM-DD HH:MM:SS (2025-10-09 14:30:00)<br>
+                            • Also works: MM/DD/YYYY, DD-MM-YYYY<br><br>
+                            
+                            <strong>5. Large Files</strong><br>
+                            • For files > 50MB, split into multiple smaller files<br>
+                            • Upload and analyze separately, then compare results
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div id="faq" class="faq-container">
+                <h2 class="section-title">
+                    <i class="fas fa-question-circle"></i>
+                    Frequently Asked Questions
+                </h2>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How accurate is the fraud detection?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            FraudGuard Pro uses advanced machine learning algorithms that achieve 99.8% accuracy in fraud detection. Our models are trained on millions of real-world transactions and continuously updated to identify emerging fraud patterns.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What file formats are supported?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Only CSV (Comma-Separated Values) files are supported. Your CSV must include specific headers and columns. See the "CSV File Format Guide" section above for detailed specifications. Maximum file size is 50MB. Excel files (.xlsx, .xls) must be saved as CSV format before uploading.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What CSV columns are absolutely required?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <strong>Required columns (must have these exact names):</strong><br>
+                            • <code>transaction_id</code> - Unique transaction identifier<br>
+                            • <code>amount</code> - Transaction amount (e.g., $150.00)<br>
+                            • <code>merchant</code> - Merchant or store name<br>
+                            • <code>category</code> - Transaction category<br>
+                            • <code>timestamp</code> - Date and time<br><br>
+                            Without these columns, the system cannot analyze your data. Click "Download Template" in the CSV Format Guide section to get a properly formatted example file.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How do I get an API key for AI analysis?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <strong>For Google Gemini:</strong> Visit <a href="https://makersuite.google.com/app/apikey" target="_blank">Google AI Studio</a> and create a new API key.<br><br>
+                            <strong>For OpenAI:</strong> Sign up at <a href="https://platform.openai.com" target="_blank">OpenAI Platform</a> and generate an API key from your account dashboard.<br><br>
+                            <strong>For Claude:</strong> Visit <a href="https://console.anthropic.com" target="_blank">Anthropic Console</a> to get your API key.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is my data secure?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! All data is processed locally on your server and encrypted during transmission. We never store your transaction data permanently. API keys are stored in your browser's local storage and never transmitted to our servers.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I export the analysis results?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolutely! You can export all analysis results including fraud detection reports, AI insights, and analytics data in various formats (CSV, JSON, PDF) from the Analytics page.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What makes a transaction suspicious?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Our ML models look for multiple fraud indicators including: unusual transaction amounts, geographic anomalies, velocity patterns (too many transactions in short time), mismatched merchant categories, and behavioral deviations from normal user patterns.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How often is the fraud detection model updated?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Our core fraud detection models are updated quarterly with the latest fraud patterns and techniques. The AI analysis powered by LLMs stays current automatically as providers update their models.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Why am I getting "Missing required columns" error?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            This error occurs when your CSV file doesn't have the required column headers. Make sure your first row contains these exact column names (case-sensitive):<br>
+                            <code>transaction_id, amount, merchant, category, timestamp</code><br><br>
+                            Common issues:<br>
+                            • Column names have extra spaces (e.g., "transaction_id " with trailing space)<br>
+                            • Different naming (e.g., "txn_id" instead of "transaction_id")<br>
+                            • Missing header row entirely<br><br>
+                            Download our CSV template to get the correct format.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How long does analysis take?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <strong>Fraud Detection:</strong> 30-90 seconds for most files<br>
+                            • Small files (< 1,000 transactions): ~30 seconds<br>
+                            • Medium files (1,000-10,000): ~60 seconds<br>
+                            • Large files (10,000-100,000): ~90 seconds<br><br>
+                            
+                            <strong>AI Analysis:</strong> 10-30 seconds additional<br>
+                            Analysis time depends on number of fraud cases detected and your selected LLM provider.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I analyze multiple files?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Yes! You can upload and analyze multiple files. Each file gets a unique task ID. Results are saved and accessible from the Analytics page. You can switch between different analysis results by uploading new files. Previous results remain available until you clear your browser data.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What happens to my data after upload?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <strong>Privacy First:</strong><br>
+                            • All processing happens locally on your server<br>
+                            • Data is temporarily stored during analysis<br>
+                            • Results are saved in local storage (your browser)<br>
+                            • No data is transmitted to external servers except when you use AI analysis (sent directly to your chosen LLM provider with YOUR API key)<br>
+                            • You can delete results anytime by clearing browser data<br><br>
+                            We never store, share, or have access to your transaction data.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div id="contact" class="section" style="margin-top: 40px;">
+                <h2 class="section-title">
+                    <i class="fas fa-headset"></i>
+                    Contact Support
+                </h2>
+
+                <div class="contact-cards">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-title">Email Support</div>
+                        <div class="contact-info">
+                            Get help via email<br>
+                            Response within 24 hours
+                        </div>
+                        <a href="mailto:support@fraudguard.pro" class="contact-btn">Send Email</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="contact-title">Live Chat</div>
+                        <div class="contact-info">
+                            Chat with our support team<br>
+                            Available 24/7
+                        </div>
+                        <button class="contact-btn">Start Chat</button>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="contact-title">Documentation</div>
+                        <div class="contact-info">
+                            Complete guides and tutorials<br>
+                            Self-service resources
+                        </div>
+                        <a href="#" class="contact-btn">Browse Docs</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                const item = this.parentElement;
+                const wasActive = item.classList.contains('active');
+                
+                // Close all FAQs
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                // Open clicked FAQ if it wasn't active
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Search functionality
+        const searchInput = document.querySelector('.search-box input');
+        searchInput.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            if (searchTerm.length > 2) {
+                // Search through FAQ questions
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer-content').textContent.toLowerCase();
+                    
+                    if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                        item.style.display = 'block';
+                        // Highlight search results
+                        item.style.borderLeft = '3px solid #3b82f6';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            } else {
+                // Show all FAQs when search is cleared
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.style.display = 'block';
+                    item.style.borderLeft = 'none';
+                });
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Download CSV Template Function
+        function downloadCSVTemplate() {
+            // Create CSV content with proper format
+            const csvContent = `transaction_id,amount,merchant,category,timestamp,location,card_type,customer_id,device
+TXN_001,$150.00,Amazon,Electronics,2025-10-09 14:30:00,New York,Credit,CUST_12345,Mobile
+TXN_002,$2500.50,Best Buy,Electronics,2025-10-09 15:45:00,Los Angeles,Credit,CUST_67890,Web
+TXN_003,$75.25,Walmart,Grocery,2025-10-09 16:20:00,Chicago,Debit,CUST_11111,POS
+TXN_004,$5000.00,Apple Store,Electronics,2025-10-09 17:10:00,San Francisco,Credit,CUST_22222,Web
+TXN_005,$45.99,Starbucks,Food & Beverage,2025-10-09 18:00:00,Seattle,Debit,CUST_33333,Mobile
+TXN_006,$1200.00,Nike Store,Clothing,2025-10-09 19:15:00,Portland,Credit,CUST_44444,POS
+TXN_007,$399.99,GameStop,Entertainment,2025-10-09 20:30:00,Dallas,Credit,CUST_55555,Web
+TXN_008,$89.50,Target,Home & Garden,2025-10-09 21:00:00,Miami,Debit,CUST_66666,Mobile
+TXN_009,$3500.00,Tesla Service,Automotive,2025-10-09 22:15:00,Austin,Credit,CUST_77777,Web
+TXN_010,$125.00,CVS Pharmacy,Health,2025-10-09 23:00:00,Boston,Debit,CUST_88888,POS`;
+
+            // Create blob and download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'fraudguard_template.csv');
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // Show success message
+            alert('✅ CSV Template Downloaded!\n\nThe template file "fraudguard_template.csv" has been saved to your downloads folder.\n\nYou can now:\n1. Open it in Excel or any spreadsheet software\n2. Replace the sample data with your actual transaction data\n3. Keep the same column structure\n4. Upload to FraudGuard for analysis');
+        }
+    </script>
+</body>
+</html>

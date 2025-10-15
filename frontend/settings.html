@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard - Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            color: black;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: none;
+            border: none;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            color: #38bdf8;
+        }
+
+        .back-btn i {
+            margin-right: 8px;
+        }
+
+        .settings-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: black;
+        }
+
+        .settings-subtitle {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: black;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 16px;
+            font-weight: 500;
+            color: black;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px 0;
+            border: none;
+            border-bottom: 2px solid #ddd;
+            background: transparent;
+            font-size: 16px;
+            color: black;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-bottom-color: #38bdf8;
+        }
+
+        .input-field::placeholder {
+            color: #999;
+        }
+
+        .save-btn {
+            background: #38bdf8;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-right: 15px;
+        }
+
+        .save-btn:hover {
+            background: #5856eb;
+        }
+
+        .analyze-btn {
+            background: #38bdf8;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .analyze-btn:hover:not(:disabled) {
+            background: #0ea5e9;
+        }
+
+        .analyze-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-success {
+            background: #f0f9ff;
+            color: #0369a1;
+            border-left: 4px solid #0369a1;
+        }
+
+        .status-error {
+            background: #fef2f2;
+            color: #dc2626;
+            border-left: 4px solid #dc2626;
+        }
+
+        .ai-results {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border-left: 4px solid #38bdf8;
+            display: none;
+        }
+
+        .ai-results.show {
+            display: block;
+        }
+
+        .ai-results h3 {
+            color: black;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .ai-insight {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            border-left: 3px solid #38bdf8;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #38bdf8;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .task-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+
+        .task-info.no-task {
+            border-left-color: #ffc107;
+            background: #fff8e1;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">
+        <i class="fas fa-arrow-left"></i>
+        Back to Dashboard
+    </a>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="settings-title">⚙️ AI Analysis Settings</h1>
+            <p class="settings-subtitle">Configure your API settings and analyze fraud reports with AI</p>
+        </div>
+
+        <div id="taskInfo" class="task-info no-task">
+            <strong>📊 Analysis Status:</strong> No fraud analysis completed yet. Upload a file on the dashboard first.
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">🤖 AI Configuration</h2>
+            
+            <div class="input-group">
+                <label for="llmProvider" class="input-label">AI Provider</label>
+                <select id="llmProvider" class="input-field" onchange="updateProviderFields()">
+                    <option value="gemini">Google Gemini</option>
+                    <option value="openai">OpenAI (GPT)</option>
+                    <option value="claude">Anthropic Claude</option>
+                    <option value="custom">Custom LLM API</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="apiKey" class="input-label" id="apiKeyLabel">API Key</label>
+                <input type="password" id="apiKey" class="input-field" 
+                       placeholder="Enter your API key (e.g., AIzaSyC... for Gemini)">
+            </div>
+
+            <div class="input-group" id="customEndpointGroup" style="display: none;">
+                <label for="customEndpoint" class="input-label">Custom API Endpoint</label>
+                <input type="text" id="customEndpoint" class="input-field" 
+                       placeholder="https://your-llm-api.com/v1/chat">
+            </div>
+
+            <button class="save-btn" onclick="saveSettings()">
+                <i class="fas fa-save"></i> Save Configuration
+            </button>
+            
+            <button class="analyze-btn" id="analyzeBtn" onclick="analyzeWithAI()" disabled>
+                <i class="fas fa-brain"></i> Analyze Fraud Report with AI
+            </button>
+
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+
+        <div class="loading" id="aiLoading">
+            <div class="spinner"></div>
+            <p>🤖 AI is analyzing your fraud report...</p>
+        </div>
+
+        <div class="ai-results" id="aiResults">
+            <h3>🧠 AI Analysis Results</h3>
+            <div id="aiInsights"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentTaskId = null;
+
+        // Load settings and task info on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            checkTaskStatus();
+        });
+
+        function loadSettings() {
+            const savedApiKey = localStorage.getItem('geminiApiKey') || '';
+            const savedProvider = localStorage.getItem('llmProvider') || 'gemini';
+            const savedEndpoint = localStorage.getItem('customEndpoint') || '';
+            
+            document.getElementById('apiKey').value = savedApiKey;
+            document.getElementById('llmProvider').value = savedProvider;
+            document.getElementById('customEndpoint').value = savedEndpoint;
+            
+            updateProviderFields();
+            updateAnalyzeButton();
+        }
+
+        function updateProviderFields() {
+            const provider = document.getElementById('llmProvider').value;
+            const customGroup = document.getElementById('customEndpointGroup');
+            const apiKeyLabel = document.getElementById('apiKeyLabel');
+            const apiKeyInput = document.getElementById('apiKey');
+            
+            // Show/hide custom endpoint
+            customGroup.style.display = provider === 'custom' ? 'block' : 'none';
+            
+            // Update placeholder based on provider
+            const placeholders = {
+                'gemini': 'Enter your Gemini API key (e.g., AIzaSyC...)',
+                'openai': 'Enter your OpenAI API key (e.g., sk-...)',
+                'claude': 'Enter your Claude API key (e.g., sk-ant-...)',
+                'custom': 'Enter your API key'
+            };
+            
+            apiKeyInput.placeholder = placeholders[provider] || 'Enter API key';
+            apiKeyLabel.textContent = provider === 'custom' ? 'API Key' : `${provider.charAt(0).toUpperCase() + provider.slice(1)} API Key`;
+        }
+
+        function checkTaskStatus() {
+            const taskId = localStorage.getItem('currentTaskId');
+            const lastTaskId = localStorage.getItem('lastTaskId'); // Also check this
+            const taskInfo = document.getElementById('taskInfo');
+            
+            console.log('Checking task status:', { taskId, lastTaskId });
+            
+            // Use either currentTaskId or lastTaskId
+            const finalTaskId = taskId || lastTaskId;
+            
+            if (finalTaskId) {
+                currentTaskId = finalTaskId;
+                taskInfo.className = 'task-info';
+                taskInfo.innerHTML = `<strong>📊 Analysis Status:</strong> Fraud analysis completed for task <code>${finalTaskId}</code>. Ready for AI analysis.`;
+                console.log('Task ID found:', finalTaskId);
+                updateAnalyzeButton();
+            } else {
+                taskInfo.className = 'task-info no-task';
+                taskInfo.innerHTML = '<strong>📊 Analysis Status:</strong> No fraud analysis completed yet. <a href="/" style="color: #38bdf8; text-decoration: underline;">Upload a file on the dashboard first</a>.';
+                console.log('No task ID found in localStorage');
+            }
+        }
+
+        function updateAnalyzeButton() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            
+            if (apiKey && currentTaskId) {
+                analyzeBtn.disabled = false;
+                analyzeBtn.innerHTML = '<i class="fas fa-brain"></i> Analyze Fraud Report with AI';
+            } else if (!apiKey) {
+                analyzeBtn.disabled = true;
+                analyzeBtn.innerHTML = '<i class="fas fa-key"></i> Enter API Key First';
+            } else if (!currentTaskId) {
+                analyzeBtn.disabled = true;
+                analyzeBtn.innerHTML = '<i class="fas fa-upload"></i> Upload Data First';
+            }
+        }
+
+        function saveSettings() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const provider = document.getElementById('llmProvider').value;
+            const customEndpoint = document.getElementById('customEndpoint').value.trim();
+
+            if (!apiKey) {
+                showStatus('Please enter a valid API key', 'error');
+                return;
+            }
+
+            // Basic validation based on provider
+            if (provider === 'gemini' && !apiKey.startsWith('AIza')) {
+                showStatus('Warning: Gemini API keys typically start with "AIza"', 'error');
+                return;
+            }
+
+            if (provider === 'openai' && !apiKey.startsWith('sk-')) {
+                showStatus('Warning: OpenAI API keys typically start with "sk-"', 'error');
+                return;
+            }
+
+            if (provider === 'custom' && !customEndpoint) {
+                showStatus('Please enter a custom API endpoint', 'error');
+                return;
+            }
+
+            // Save to localStorage
+            localStorage.setItem('geminiApiKey', apiKey);
+            localStorage.setItem('llmProvider', provider);
+            localStorage.setItem('customEndpoint', customEndpoint);
+            
+            showStatus(`${provider.toUpperCase()} configuration saved successfully!`, 'success');
+            updateAnalyzeButton();
+        }
+
+        function analyzeWithAI() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const provider = document.getElementById('llmProvider').value;
+            const customEndpoint = document.getElementById('customEndpoint').value.trim();
+            
+            if (!apiKey) {
+                showStatus('Please enter your API key first', 'error');
+                return;
+            }
+
+            if (!currentTaskId) {
+                showStatus('No fraud analysis data available. Please analyze a file first.', 'error');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('aiLoading').classList.add('show');
+            document.getElementById('aiResults').classList.remove('show');
+            document.getElementById('analyzeBtn').disabled = true;
+
+            const requestData = {
+                task_id: currentTaskId,
+                api_key: apiKey,
+                provider: provider,
+                custom_endpoint: provider === 'custom' ? customEndpoint : null
+            };
+
+            fetch('/ai-analysis', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('aiLoading').classList.remove('show');
+                document.getElementById('analyzeBtn').disabled = false;
+                
+                if (data.success) {
+                    displayAIResults(data.insights);
+                    showStatus('AI analysis completed successfully!', 'success');
+                } else {
+                    throw new Error(data.error || 'AI analysis failed');
+                }
+            })
+            .catch(error => {
+                document.getElementById('aiLoading').classList.remove('show');
+                document.getElementById('analyzeBtn').disabled = false;
+                showStatus('AI Analysis failed: ' + error.message, 'error');
+                console.error('AI Analysis error:', error);
+            });
+        }
+
+        function displayAIResults(insights) {
+            const resultsDiv = document.getElementById('aiResults');
+            const insightsDiv = document.getElementById('aiInsights');
+            
+            let html = '';
+            
+            if (typeof insights === 'string') {
+                // Enhanced formatting for per-transaction analysis
+                let formattedText = insights
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold text
+                    .replace(/#{1,3}\s+(.*?)$/gm, '<h4>$1</h4>'); // Headers
+                
+                const lines = formattedText.split('\n');
+                const processedLines = [];
+                let inTransaction = false;
+                
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    // Detect transaction headers with multiple patterns
+                    if (line.match(/^═+$/) || line.match(/^━+$/)) {
+                        // Border lines - skip
+                        continue;
+                    }
+                    
+                    // Transaction header patterns
+                    if (line.match(/TRANSACTION\s*#\d+/i) || line.match(/🚨\s*TRANSACTION/i) || line.match(/🔍\s*Transaction/i)) {
+                        if (inTransaction) {
+                            processedLines.push('</div>'); // Close previous transaction
+                        }
+                        processedLines.push(`
+                            <div class="transaction-card" style="
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                color: white;
+                                padding: 20px;
+                                border-radius: 12px;
+                                margin: 20px 0;
+                                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                            ">
+                                <h3 style="color: white; margin: 0 0 15px 0; font-size: 1.3em;">
+                                    🔍 ${line.replace(/^(═+|━+)/g, '').trim()}
+                                </h3>
+                        `);
+                        inTransaction = true;
+                        continue;
+                    }
+                    
+                    // Transaction detail fields
+                    if (line.match(/^(Why Flagged|Why This Was Flagged|Root Cause|Risk Level|Risk Assessment|Action Needed|Immediate Action|Prevention|Prevention Strategy):/i)) {
+                        const [label, ...valueParts] = line.split(':');
+                        const value = valueParts.join(':').trim();
+                        const emoji = label.match(/flagged/i) ? '🚨' : 
+                                     label.match(/root cause/i) ? '🔎' :
+                                     label.match(/risk/i) ? '⚠️' :
+                                     label.match(/action/i) ? '🛡️' : '💡';
+                        processedLines.push(`
+                            <div style="margin: 12px 0; background: rgba(255,255,255,0.15); padding: 12px; border-radius: 8px;">
+                                <strong style="color: #fef3c7; font-size: 1.1em;">${emoji} ${label.trim()}:</strong>
+                                <p style="margin: 5px 0 0 0; color: white; line-height: 1.6;">${value}</p>
+                            </div>
+                        `);
+                        continue;
+                    }
+                    
+                    // Transaction metadata (Amount, ID, etc.)
+                    if (line.match(/^(•\s*)?(Transaction\s+)?ID:|Amount:|Risk Score:|Merchant:|Category:|Timestamp:/i)) {
+                        processedLines.push(`
+                            <p style="margin: 5px 0; font-size: 0.95em; opacity: 0.9;">
+                                ${line.replace(/^•\s*/, '')}
+                            </p>
+                        `);
+                        continue;
+                    }
+                    
+                    // Executive Summary
+                    if (line.match(/EXECUTIVE SUMMARY|OVERALL ASSESSMENT|📊/i)) {
+                        if (inTransaction) {
+                            processedLines.push('</div>'); // Close transaction card
+                            inTransaction = false;
+                        }
+                        processedLines.push(`
+                            </div>
+                            <div class="summary-card" style="
+                                background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+                                color: #78350f;
+                                padding: 25px;
+                                border-radius: 12px;
+                                margin: 30px 0;
+                                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                            ">
+                                <h2 style="color: #78350f; margin: 0 0 15px 0;">
+                                    📊 ${line.replace(/^═+/, '').trim()}
+                                </h2>
+                        `);
+                        continue;
+                    }
+                    
+                    // Regular text
+                    if (line.length > 0) {
+                        processedLines.push(`<p style="margin: 10px 0; line-height: 1.6;">${line}</p>`);
+                    }
+                }
+                
+                // Close any open cards
+                if (inTransaction) {
+                    processedLines.push('</div>');
+                }
+                
+                html = processedLines.join('');
+                
+            } else if (Array.isArray(insights)) {
+                insights.forEach(insight => {
+                    html += `<div class="ai-insight">${insight}</div>`;
+                });
+            } else if (typeof insights === 'object') {
+                Object.entries(insights).forEach(([key, value]) => {
+                    html += `<div class="ai-insight"><strong>${key}:</strong> ${value}</div>`;
+                });
+            } else {
+                html = `<div class="ai-insight">${insights}</div>`;
+            }
+            
+            insightsDiv.innerHTML = html;
+            resultsDiv.classList.add('show');
+        }
+
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message status-${type}`;
+            statusDiv.style.display = 'block';
+
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Update analyze button when API key changes
+        document.getElementById('apiKey').addEventListener('input', updateAnalyzeButton);
+    </script>
+</body>
+</html>
