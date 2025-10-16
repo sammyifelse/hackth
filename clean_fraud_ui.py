@@ -289,6 +289,17 @@ def help_page():
         <p><a href="/">Back to Dashboard</a></p>
         '''
 
+@app.route('/download-sample-csv')
+def download_sample_csv():
+    """Download the sample CSV file for testing"""
+    try:
+        return send_file('samplefile.csv', 
+                        mimetype='text/csv',
+                        as_attachment=True,
+                        download_name='fraudguard_sample_data.csv')
+    except FileNotFoundError:
+        return jsonify({'error': 'Sample file not found'}), 404
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     try:

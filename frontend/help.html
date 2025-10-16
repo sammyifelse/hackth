@@ -795,10 +795,16 @@
                 <div class="table-card">
                     <div class="table-header">
                         <div class="table-title">📋 Required CSV Column Specifications</div>
-                        <button class="export-btn" onclick="downloadCSVTemplate()">
-                            <i class="fas fa-download"></i>
-                            Download Template
-                        </button>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="export-btn" onclick="downloadSampleCSV()" style="background: #f97316;">
+                                <i class="fas fa-file-csv"></i>
+                                Download Sample Data
+                            </button>
+                            <button class="export-btn" onclick="downloadCSVTemplate()">
+                                <i class="fas fa-download"></i>
+                                Download Template
+                            </button>
+                        </div>
                     </div>
                     <table style="margin: 0;">
                         <thead>
@@ -1271,6 +1277,17 @@ TXN_010,$125.00,CVS Pharmacy,Health,2025-10-09 23:00:00,Boston,Debit,CUST_88888,
             
             // Show success message
             alert('✅ CSV Template Downloaded!\n\nThe template file "fraudguard_template.csv" has been saved to your downloads folder.\n\nYou can now:\n1. Open it in Excel or any spreadsheet software\n2. Replace the sample data with your actual transaction data\n3. Keep the same column structure\n4. Upload to FraudGuard for analysis');
+        }
+
+        // Download Sample CSV with Real Data
+        function downloadSampleCSV() {
+            // Download the actual sample file from server
+            window.location.href = '/download-sample-csv';
+            
+            // Show info message
+            setTimeout(() => {
+                alert('📥 Sample CSV Downloaded!\n\nThis file contains real sample transaction data including fraudulent transactions.\n\nYou can:\n1. Upload this file directly to test the system\n2. See how fraud detection works on real data\n3. Use it as a reference for formatting your own data\n\nJust go to Dashboard and upload this file to see FraudGuard in action!');
+            }, 500);
         }
     </script>
 </body>
